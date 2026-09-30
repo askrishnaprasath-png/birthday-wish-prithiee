@@ -5,290 +5,340 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday Prithiee</title>
     
-    <!-- FontAwesome for the Instagram and Snapchat Icons -->
+    <!-- FontAwesome for the Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Confetti Library for the celebration effect -->
+    <!-- Confetti Library -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
     <style>
-        /* --- General Page Styling & Background --- */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+        :root {
+            --primary-pink: #ff4081;
+            --gradient-pink: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --envelope-color: #d81b60;
+            --envelope-flap: #c2185b;
+            --envelope-inside: #880e4f;
         }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            background: var(--gradient-pink);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            position: relative;
+            display: flex; justify-content: center; align-items: center;
+            overflow: hidden; position: relative;
+            cursor: default;
         }
 
-        /* Floating background circles for aesthetics */
-        .bg-bubbles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
+        .bg-particles { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+        .bg-particles li {
+            position: absolute; list-style: none; display: block; border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4); box-shadow: 0 0 20px rgba(255,255,255,0.2);
+            animation: floatUp 20s infinite linear; bottom: -150px;
         }
-        .bg-bubbles li {
-            position: absolute;
-            list-style: none;
-            display: block;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.15);
-            bottom: -160px;
-            animation: square 25s infinite;
-            transition-timing-function: linear;
-            border-radius: 50%;
-        }
-        .bg-bubbles li:nth-child(1) { left: 10%; }
-        .bg-bubbles li:nth-child(2) { left: 20%; width: 80px; height: 80px; animation-delay: 2s; animation-duration: 17s; }
-        .bg-bubbles li:nth-child(3) { left: 25%; animation-delay: 4s; }
-        .bg-bubbles li:nth-child(4) { left: 40%; width: 60px; height: 60px; animation-duration: 22s; background-color: rgba(255, 255, 255, 0.25); }
-        .bg-bubbles li:nth-child(5) { left: 70%; }
-        .bg-bubbles li:nth-child(6) { left: 80%; width: 120px; height: 120px; animation-delay: 3s; background-color: rgba(255, 255, 255, 0.2); }
-        @keyframes square {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-700px) rotate(600deg); }
+        .bg-particles li:nth-child(1) { left: 10%; width: 40px; height: 40px; animation-duration: 15s; }
+        .bg-particles li:nth-child(2) { left: 25%; width: 80px; height: 80px; animation-duration: 25s; animation-delay: 2s; background: rgba(255, 255, 255, 0.2); }
+        .bg-particles li:nth-child(3) { left: 45%; width: 50px; height: 50px; animation-duration: 18s; animation-delay: 4s; }
+        .bg-particles li:nth-child(4) { left: 65%; width: 100px; height: 100px; animation-duration: 28s; background: rgba(255, 255, 255, 0.15); }
+        .bg-particles li:nth-child(5) { left: 85%; width: 30px; height: 30px; animation-duration: 12s; animation-delay: 1s; }
+        .bg-particles li:nth-child(6) { left: 55%; width: 60px; height: 60px; animation-duration: 22s; animation-delay: 5s; }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+            100% { transform: translateY(-1000px) rotate(360deg) scale(1.5); opacity: 0; }
         }
 
-        /* --- Landing Page Styling (Glassmorphism) --- */
-        #landing-page {
-            position: relative;
-            z-index: 10;
-            background: rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            padding: 50px 40px;
-            border-radius: 20px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            text-align: center;
-            max-width: 600px;
-            width: 90%;
-            animation: fadeIn 1.5s ease-in-out;
+        /* Floating Hearts (extra effect) */
+        .floating-hearts {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 5; overflow: hidden;
+        }
+        .heart {
+            position: absolute; bottom: -40px; font-size: 18px; color: #ff4081;
+            animation: riseHeart linear infinite; opacity: 0.7; text-shadow: 0 0 8px rgba(255,64,129,0.6);
+        }
+        @keyframes riseHeart {
+            0% { transform: translateY(0) rotate(0deg) scale(0.6); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-110vh) rotate(360deg) scale(1.2); opacity: 0; }
         }
 
-        .pre-text {
-            font-size: 1.1rem;
-            color: #555;
-            margin-bottom: 20px;
-            font-style: italic;
-            font-weight: 500;
+        /* Click sparkles */
+        .sparkle {
+            position: fixed; pointer-events: none; z-index: 9999;
+            font-size: 16px; animation: sparkleOut 0.8s forwards;
+        }
+        @keyframes sparkleOut {
+            0% { transform: scale(0.3) translateY(0); opacity: 1; }
+            100% { transform: scale(1.4) translateY(-40px); opacity: 0; }
         }
 
-        h1 {
-            font-size: 2.8rem;
-            color: #d81b60;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        /* Balloons */
+        .balloon {
+            position: absolute; bottom: -100px; width: 60px; height: 70px;
+            background: var(--primary-pink); border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+            box-shadow: inset -10px -10px 15px rgba(0,0,0,0.1); z-index: 2;
+            animation: floatBalloon 15s ease-in-out infinite; opacity: 0.8;
+        }
+        .balloon::before {
+            content: ""; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
+            width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 10px solid var(--primary-pink);
+        }
+        .balloon::after {
+            content: ""; position: absolute; bottom: -40px; left: 50%;
+            width: 1px; height: 30px; background: rgba(0,0,0,0.2);
+        }
+        .b1 { left: 15%; background: #ff79b0; animation-duration: 14s; }
+        .b2 { left: 80%; background: #e94057; animation-duration: 18s; animation-delay: 2s; }
+        .b3 { left: 50%; background: #f27121; animation-duration: 16s; animation-delay: 5s; }
+
+        @keyframes floatBalloon {
+            0% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-60vh) rotate(5deg); }
+            100% { transform: translateY(-120vh) rotate(-5deg); }
         }
 
-        .main-btn {
-            background: linear-gradient(45deg, #ff4081, #ff79b0);
-            color: white;
-            border: none;
-            padding: 18px 35px;
-            font-size: 1.2rem;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 64, 129, 0.4);
-            transition: all 0.3s ease;
-            font-weight: bold;
-            position: relative;
-            overflow: hidden;
+        .screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 20; transition: opacity 0.8s ease, transform 0.8s ease, visibility 0.8s;
+        }
+        .hidden-screen { opacity: 0; visibility: hidden; pointer-events: none; transform: scale(1.1); }
+
+        /* Sequence 1: Countdown */
+        #countdown-screen { background: linear-gradient(135deg, #1a1a1a 0%, #33001b 100%); z-index: 50; }
+        .counter-box { position: relative; width: 200px; height: 200px; display: flex; justify-content: center; align-items: center; }
+        .ring { position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 4px solid transparent; border-top-color: var(--primary-pink); border-right-color: #fecfef; animation: spinRing 1s linear infinite; }
+        #counter-number { font-size: 5rem; color: white; font-weight: 700; text-shadow: 0 0 20px var(--primary-pink), 0 0 40px var(--primary-pink); animation: pulseText 1s infinite; }
+        @keyframes spinRing { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes pulseText { 0% { transform: scale(0.8); opacity: 0; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(1); opacity: 0; } }
+
+        /* Sequence 2: Greeting */
+        #greeting-screen { background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(10px); z-index: 40; }
+        .greeting-card {
+            background: rgba(255, 255, 255, 0.95); padding: 40px; border-radius: 20px; text-align: center; max-width: 90%; width: 450px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3); border: 1px solid var(--glass-border); transform: translateY(30px); opacity: 0;
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #greeting-screen.active .greeting-card { transform: translateY(0); opacity: 1; }
+        .greeting-title { font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: var(--primary-pink); margin-bottom: 10px; }
+        .greeting-text { font-size: 1.1rem; color: #555; margin-bottom: 30px; line-height: 1.5; font-weight: 500; }
+        .continue-btn { background: var(--primary-pink); color: white; border: none; padding: 12px 30px; font-size: 1.1rem; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 64, 129, 0.4); transition: all 0.3s ease; font-weight: 600; }
+        .continue-btn:hover { background: #d81b60; transform: scale(1.05); box-shadow: 0 8px 20px rgba(255, 64, 129, 0.6); }
+
+        #main-screen { perspective: 1000px; z-index: 30; }
+        .main-card {
+            background: var(--glass-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            padding: 50px 30px; border-radius: 30px; box-shadow: 0 15px 45px rgba(0,0,0,0.15), inset 0 0 0 2px rgba(255,255,255,0.6);
+            text-align: center; max-width: 600px; width: 90%; transform-style: preserve-3d; transition: transform 0.1s ease-out;
         }
 
-        .main-btn:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 8px 25px rgba(255, 64, 129, 0.6);
-        }
+        /* Beautiful CSS Cake */
+        .cake-container { position: relative; width: 120px; height: 100px; margin: 0 auto 20px; transform: translateZ(20px); }
+        .cake-tier { position: absolute; left: 50%; transform: translateX(-50%); background: #fff; border-radius: 10px; box-shadow: inset 0 -5px 10px rgba(0,0,0,0.1); border-bottom: 4px solid #ff79b0; }
+        .cake-bottom { bottom: 0; width: 120px; height: 40px; background: #fff8f8; }
+        .cake-top { bottom: 40px; width: 90px; height: 40px; background: #fff0f5; border-bottom: 4px solid #ff4081; }
+        .candle { position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); width: 8px; height: 25px; background: #ffb74d; border-radius: 4px; }
+        .flame { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 12px; height: 18px; background: #ffeb3b; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; box-shadow: 0 0 10px #ffeb3b; animation: flicker 0.5s infinite alternate; }
+        @keyframes flicker { 0% { transform: translateX(-50%) scale(1); opacity: 0.9; } 100% { transform: translateX(-50%) scale(1.1); opacity: 1; box-shadow: 0 0 20px #ffeb3b, 0 0 30px #ff9800; } }
 
-        /* --- Letter Modal Styling --- */
-        #overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(5px);
-            z-index: 50;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
+        .main-title { font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: #d81b60; margin-bottom: 10px; text-shadow: 2px 2px 5px rgba(255,255,255,0.8); transform: translateZ(30px); }
+        .main-subtitle { font-size: 1.1rem; color: #555; margin-bottom: 25px; transform: translateZ(20px); font-weight: 500; }
 
-        #letter-modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.7);
-            background: #fdfbf7; /* Paper color */
-            background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
-            width: 90%;
-            max-width: 600px;
-            max-height: 90vh;
-            padding: 40px;
-            border-radius: 5px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            z-index: 100;
-            opacity: 0;
-            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            overflow-y: auto;
-            color: #333;
-            font-family: 'Georgia', serif; /* Professional letter font */
-            line-height: 1.6;
-        }
+        /* The "Don't Miss It" Pointer */
+        .pointer-container { margin-bottom: 15px; transform: translateZ(40px); animation: bouncePointer 2s infinite; }
+        .pointer-text { font-size: 1rem; color: #d81b60; font-weight: 700; background: rgba(255, 255, 255, 0.8); display: inline-block; padding: 5px 15px; border-radius: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 5px; }
+        .pointer-icon { color: #d81b60; font-size: 1.5rem; display: block; }
+        @keyframes bouncePointer { 0%, 100% { transform: translateZ(40px) translateY(0); } 50% { transform: translateZ(40px) translateY(-10px); } }
 
-        /* Classes to trigger the animations */
-        #overlay.show {
-            display: block;
-            opacity: 1;
+        .action-btn {
+            background: linear-gradient(45deg, #ff4081, #ff79b0, #ff4081); background-size: 200% auto; color: white; border: none;
+            padding: 20px 30px; font-size: 1.2rem; border-radius: 50px; cursor: pointer;
+            box-shadow: 0 10px 25px rgba(255, 64, 129, 0.4), 0 0 0 4px rgba(255, 64, 129, 0.2);
+            transition: all 0.4s ease; font-weight: bold; transform: translateZ(50px);
+            animation: gradientMove 3s infinite linear, buttonPulse 2s infinite ease-in-out;
+            position: relative; z-index: 10;
         }
-        #letter-modal.show {
-            display: block;
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
-        }
+        @keyframes gradientMove { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
+        @keyframes buttonPulse { 0%, 100% { transform: translateZ(50px) scale(1); box-shadow: 0 10px 25px rgba(255, 64, 129, 0.4), 0 0 0 4px rgba(255, 64, 129, 0.2); } 50% { transform: translateZ(50px) scale(1.05); box-shadow: 0 15px 35px rgba(255, 64, 129, 0.6), 0 0 0 8px rgba(255, 64, 129, 0); } }
+        .action-btn:hover { letter-spacing: 1px; }
 
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #888;
-            transition: color 0.2s;
+        #envelope-scene {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 90; opacity: 0; visibility: hidden; transition: opacity 0.5s;
+            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px);
         }
-        .close-btn:hover { color: #d81b60; }
-
-        /* --- Letter Typography --- */
-        .letter-header {
-            margin-bottom: 25px;
-            border-bottom: 2px solid #e0e0e0;
-            padding-bottom: 15px;
-        }
-        .letter-row { margin-bottom: 5px; }
-        .label { font-weight: bold; display: inline-block; width: 60px; }
-        .subject { font-weight: bold; margin-top: 15px; font-size: 1.1rem;}
+        #envelope-scene.show { opacity: 1; visibility: visible; }
         
-        .letter-body {
-            font-size: 1.1rem;
-            text-align: justify;
-            margin-bottom: 30px;
-            white-space: pre-wrap; /* Preserves spacing and line breaks */
+        .env-wrapper { position: relative; width: 300px; height: 200px; perspective: 1000px; transform: scale(0.8); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        #envelope-scene.show .env-wrapper { transform: scale(1.2); }
+        
+        .env-back { position: absolute; width: 100%; height: 100%; background: var(--envelope-inside); border-radius: 5px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        
+        .env-flap {
+            position: absolute; top: 0; left: 0; width: 0; height: 0;
+            border-left: 150px solid transparent; border-right: 150px solid transparent;
+            border-top: 100px solid var(--envelope-flap);
+            transform-origin: top; transition: transform 0.6s 0.2s ease-in-out, z-index 0.6s; z-index: 4;
         }
-        .tamil-text {
-            font-style: italic;
-            color: #555;
-            background: rgba(255, 192, 203, 0.2);
-            padding: 15px;
-            border-left: 4px solid #ff4081;
-            border-radius: 0 5px 5px 0;
-            margin-top: 15px;
-            display: block;
-        }
-
-        /* --- Social Media Links / Buttons --- */
-        .social-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            align-items: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px dashed #ccc;
+        .env-wrapper.open .env-flap { transform: rotateX(180deg); z-index: 1; }
+        
+        .env-front {
+            position: absolute; bottom: 0; left: 0; width: 0; height: 0;
+            border-left: 150px solid var(--envelope-color); border-right: 150px solid var(--envelope-color);
+            border-bottom: 100px solid #ad1457; border-top: 100px solid transparent; z-index: 3; pointer-events: none;
         }
 
-        .social-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            text-decoration: none;
-            padding: 12px 30px;
-            border-radius: 50px;
-            color: white;
-            font-weight: bold;
-            font-size: 1.1rem;
-            font-family: 'Segoe UI', sans-serif;
-            transition: transform 0.2s, box-shadow 0.2s;
-            width: 100%;
-            max-width: 300px;
-            position: relative;
-            z-index: 105; /* Ensures they are clickable over everything */
-            cursor: pointer;
+        .env-letter-dummy {
+            position: absolute; top: 10px; left: 10px; width: 280px; height: 180px;
+            background: #fdfbf7; border-radius: 5px; z-index: 2; display: flex; flex-direction: column; padding: 20px;
+            transition: transform 0.8s 0.8s ease-in-out;
+        }
+        .dummy-line { height: 10px; background: #e0e0e0; border-radius: 5px; margin-bottom: 15px; }
+        .dummy-line.short { width: 50%; }
+        .env-wrapper.pull .env-letter-dummy { transform: translateY(-120px); z-index: 5; }
+
+        #overlay { display: none; } /* Handled by envelope background now */
+        
+        #letter-modal {
+            display: none; position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -40%) scale(0.5); opacity: 0;
+            background: #fdfbf7; background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+            width: 90%; max-width: 600px; max-height: 90vh; padding: 40px; border-radius: 8px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.5); z-index: 101;
+            transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow-y: auto; color: #333; font-family: 'Georgia', serif; line-height: 1.7;
+        }
+        #letter-modal.show { display: block; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #888; transition: color 0.2s, transform 0.2s; }
+        .close-btn:hover { color: #d81b60; transform: rotate(90deg); }
+
+        .letter-header { margin-bottom: 25px; border-bottom: 2px solid #e0e0e0; padding-bottom: 15px; }
+        .letter-row { margin-bottom: 5px; }
+        .label { font-weight: bold; display: inline-block; width: 60px; color: #555; }
+        .subject { font-weight: bold; margin-top: 15px; font-size: 1.1rem; color: #d81b60; }
+        .letter-body { font-size: 1.1rem; text-align: justify; margin-bottom: 30px; white-space: pre-wrap; }
+        .tamil-text { font-style: italic; color: #444; background: rgba(255, 64, 129, 0.05); padding: 15px 20px; border-left: 4px solid #ff4081; border-radius: 0 8px 8px 0; margin-top: 20px; display: block; }
+
+        .social-container { display: flex; flex-direction: column; gap: 15px; align-items: center; margin-top: 30px; padding-top: 25px; border-top: 1px dashed #ccc; }
+        .social-link { display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; padding: 15px 30px; border-radius: 50px; color: white; font-weight: bold; font-size: 1.1rem; font-family: 'Poppins', sans-serif; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s; width: 100%; max-width: 320px; cursor: pointer; }
+        .social-link:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .ig-btn { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+        .snap-btn { background: #FFFC00; color: #000; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .social-username { font-size: 0.9rem; font-weight: 500; opacity: 0.9; margin-left: auto; background: rgba(0,0,0,0.1); padding: 2px 10px; border-radius: 20px;}
+
+        .reply-section { margin-top: 25px; padding-top: 25px; border-top: 1px dashed #ccc; display: flex; flex-direction: column; gap: 15px; align-items: center; }
+        .reply-box { width: 100%; max-width: 400px; padding: 15px; border: 2px solid #fecfef; border-radius: 15px; font-family: 'Poppins', sans-serif; font-size: 1rem; resize: none; outline: none; transition: all 0.3s; background: rgba(255, 255, 255, 0.7); color: #333; }
+        .reply-box:focus { border-color: #ff4081; box-shadow: 0 0 10px rgba(255, 64, 129, 0.2); }
+        .submit-btn { background: linear-gradient(45deg, #8a2387, #e94057, #f27121); color: white; border: none; padding: 15px 30px; font-size: 1.1rem; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 15px rgba(233, 64, 87, 0.4); transition: all 0.3s ease; font-weight: bold; width: 100%; max-width: 320px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .submit-btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 20px rgba(233, 64, 87, 0.6); }
+        .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+        /* Soft glow pulse on cake flame & title */
+        .main-title {
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+        @keyframes titleGlow {
+            from { text-shadow: 2px 2px 5px rgba(255,255,255,0.8), 0 0 10px rgba(216,27,96,0.3); }
+            to { text-shadow: 2px 2px 8px rgba(255,255,255,0.9), 0 0 25px rgba(255,64,129,0.6); }
         }
 
-        .social-link:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-        }
-
-        .ig-btn {
-            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-        }
-
-        .snap-btn {
-            background: #FFFC00;
-            color: #000;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .social-username {
-            font-size: 0.9rem;
-            font-weight: normal;
-            opacity: 0.9;
-            margin-left: 5px;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Responsive tweaks */
+        /* Mobile tweaks */
         @media (max-width: 480px) {
-            h1 { font-size: 2rem; }
-            #landing-page { padding: 35px 25px; }
-            .main-btn { padding: 14px 25px; font-size: 1rem; }
-            #letter-modal { padding: 25px 20px; }
+            .main-title { font-size: 2.6rem; }
+            .greeting-title { font-size: 2.6rem; }
+            .main-card { padding: 35px 20px; }
+            .action-btn { padding: 16px 22px; font-size: 1.05rem; }
+            #letter-modal { padding: 25px 18px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Animated Background Bubbles -->
-    <ul class="bg-bubbles">
+    <!-- Floating Background -->
+    <ul class="bg-particles">
         <li></li><li></li><li></li><li></li><li></li><li></li>
     </ul>
+    
+    <!-- Extra floating hearts -->
+    <div class="floating-hearts" id="hearts-container"></div>
+    
+    <!-- Balloons -->
+    <div class="balloon b1"></div>
+    <div class="balloon b2"></div>
+    <div class="balloon b3"></div>
 
-    <!-- Landing Page UI -->
-    <div id="landing-page">
-        <p class="pre-text">"If you have 2 mins time please spend on this UI page Prithiee"</p>
-        <h1>🎉 Happy Birthday Prithiee! 🎂</h1>
-        <button class="main-btn" onclick="openLetter()">
-            <i class="fa-solid fa-envelope-open-text"></i> Birthday Treat Application Letter
-        </button>
+    <!-- Sequence 1 -->
+    <div id="countdown-screen" class="screen">
+        <div class="counter-box">
+            <div class="ring"></div>
+            <div id="counter-number">3</div>
+        </div>
     </div>
 
-    <!-- Overlay behind the letter -->
-    <div id="overlay" onclick="closeLetter()"></div>
+    <!-- Sequence 2 -->
+    <div id="greeting-screen" class="screen hidden-screen">
+        <div class="greeting-card">
+            <i class="fa-solid fa-envelope-heart text-5xl mb-4" style="color: var(--primary-pink); font-size: 3rem; margin-bottom: 15px; display: block;"></i>
+            <h2 class="greeting-title">Hi Prithiee</h2>
+            <p class="greeting-text">If you have 2 mins time please spend on this ui page prithiee.</p>
+            <button class="continue-btn" onclick="startMainExperience()">
+                Continue <i class="fa-solid fa-arrow-right ml-2"></i>
+            </button>
+        </div>
+    </div>
 
-    <!-- The Application Letter Modal -->
+    <!-- Sequence 3 -->
+    <div id="main-screen" class="screen hidden-screen">
+        <div class="main-card" id="tilt-card">
+            
+            <!-- Visual CSS Cake -->
+            <div class="cake-container">
+                <div class="candle"><div class="flame"></div></div>
+                <div class="cake-tier cake-top"></div>
+                <div class="cake-tier cake-bottom"></div>
+            </div>
+            
+            <h1 class="main-title">Happy Birthday<br>Prithiee!</h1>
+            <p class="main-subtitle">A special day deserves a special message. 💖</p>
+            
+            <!-- Highly visible pointer -->
+            <div class="pointer-container">
+                <p class="pointer-text">Prithiee, open this envelope below! Don't miss it! 🥺</p>
+                <i class="fa-solid fa-angles-down pointer-icon"></i>
+            </div>
+
+            <button class="action-btn" onclick="triggerEnvelope()">
+                <i class="fa-solid fa-envelope-open-text" style="margin-right: 8px;"></i> Birthday Treat Application Letter
+            </button>
+        </div>
+    </div>
+
+    <!-- Envelope Opening Scene -->
+    <div id="envelope-scene">
+        <div class="env-wrapper" id="envelope-wrapper">
+            <div class="env-back"></div>
+            <div class="env-letter-dummy">
+                <div class="dummy-line"></div>
+                <div class="dummy-line"></div>
+                <div class="dummy-line short"></div>
+                <div style="flex-grow: 1;"></div>
+                <div style="font-family: 'Dancing Script', cursive; font-size: 1.5rem; color: #d81b60; text-align: right;">Prithiee...</div>
+            </div>
+            <div class="env-front"></div>
+            <div class="env-flap"></div>
+        </div>
+    </div>
+
+    <!-- The Final Letter Modal -->
     <div id="letter-modal">
         <i class="fa-solid fa-xmark close-btn" onclick="closeLetter()" title="Close"></i>
         
@@ -305,75 +355,239 @@
             <span class="tamil-text">"Ne reply pannuna nalu pathutu vitutalum ..move on sonalu seri .. oru time accept and return follow pannu silly ah aniku oru karnom sona maari laam solatha pritheee enime na unaku msg panni disturb panna maten soliten that's why I created this uh ... Una summa snap anupratha nalu pathu maanasa thethipen prithee and also in Instagram .. Give your treat for birthday Prithiee"</span>
         </div>
 
-        <!-- Social Media Buttons - Connected EXACTLY to your URLs -->
         <div class="social-container">
-            <!-- Instagram Link -->
-            <a href="https://www.instagram.com/_k_r_1_s_h" 
-               target="_blank" 
-               rel="noopener noreferrer"
-               class="social-link ig-btn">
-                <i class="fa-brands fa-instagram fa-lg"></i> 
-                Instagram 
+            <a href="https://www.instagram.com/_k_r_1_s_h" target="_blank" rel="noopener noreferrer" class="social-link ig-btn">
+                <i class="fa-brands fa-instagram fa-xl"></i> Instagram 
                 <span class="social-username">@_k_r_1_s_h</span>
             </a>
-
-            <!-- Snapchat Link -->
-            <a href="https://www.snapchat.com/add/krish140906?share_id=BhgL71hKU0Q&locale=en-IN" 
-               target="_blank" 
-               rel="noopener noreferrer"
-               class="social-link snap-btn">
-                <i class="fa-brands fa-snapchat fa-lg"></i> 
-                Snapchat 
+            <a href="https://www.snapchat.com/add/krish140906?share_id=fhmAJ1POvM4&locale=en-IN" target="_blank" rel="noopener noreferrer" class="social-link snap-btn">
+                <i class="fa-brands fa-snapchat fa-xl"></i> Snapchat 
                 <span class="social-username">@krish140906</span>
             </a>
         </div>
+
+        <div class="reply-section">
+            <p style="font-family: 'Dancing Script', cursive; font-size: 2rem; color: #d81b60; margin-bottom: 5px;">Leave a reply for me?</p>
+            <textarea id="replyMsg" class="reply-box" rows="3" placeholder="Type your reply here Prithiee..."></textarea>
+            <p id="wa-error" style="color: #ff4081; font-size: 0.9rem; display: none; margin-top: -5px; font-weight: bold;">Please write something first! 🥺</p>
+            
+            <div id="success-msg" style="display: none; background: #e8f5e9; color: #2e7d32; padding: 15px; border-radius: 10px; font-weight: bold; width: 100%; max-width: 400px; text-align: center; border: 1px solid #c8e6c9;">
+                <i class="fa-solid fa-check-circle fa-lg"></i> Message Sent Successfully! 
+            </div>
+
+            <button id="send-btn" class="submit-btn" onclick="sendReplyToEmail()">
+                <i class="fa-solid fa-paper-plane fa-xl"></i> Send Message
+            </button>
+        </div>
     </div>
 
-    <!-- Interactive JavaScript -->
     <script>
-        const modal = document.getElementById('letter-modal');
-        const overlay = document.getElementById('overlay');
+        // Start sequence
+        window.onload = () => {
+            let count = 3;
+            const counterEl = document.getElementById('counter-number');
+            const countdownScreen = document.getElementById('countdown-screen');
+            const greetingScreen = document.getElementById('greeting-screen');
 
-        function openLetter() {
-            // Show the modal and overlay
-            overlay.classList.add('show');
-            modal.classList.add('show');
+            const timer = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    counterEl.innerText = count;
+                    counterEl.style.animation = 'none';
+                    counterEl.offsetHeight; 
+                    counterEl.style.animation = null;
+                } else {
+                    clearInterval(timer);
+                    countdownScreen.classList.add('hidden-screen');
+                    setTimeout(() => {
+                        greetingScreen.classList.remove('hidden-screen');
+                        setTimeout(() => greetingScreen.classList.add('active'), 100);
+                    }, 800);
+                }
+            }, 1000);
+
+            // Start floating hearts
+            createFloatingHearts();
+        };
+
+        // Extra effect: continuous floating hearts
+        function createFloatingHearts() {
+            const container = document.getElementById('hearts-container');
+            const hearts = ['💖', '💗', '💕', '💓', '❤️', '💘'];
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerText = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.fontSize = (14 + Math.random() * 18) + 'px';
+                heart.style.animationDuration = (8 + Math.random() * 10) + 's';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(heart);
+                setTimeout(() => heart.remove(), 18000);
+            }, 600);
+        }
+
+        // Extra effect: click sparkles
+        document.addEventListener('click', (e) => {
+            // Don't create sparkles when clicking interactive elements heavily
+            if (e.target.closest('button, a, textarea, .close-btn')) return;
+            const sparkles = ['✨', '💖', '⭐', '💫'];
+            for (let i = 0; i < 4; i++) {
+                const s = document.createElement('div');
+                s.className = 'sparkle';
+                s.innerText = sparkles[Math.floor(Math.random() * sparkles.length)];
+                s.style.left = (e.clientX + (Math.random() * 40 - 20)) + 'px';
+                s.style.top = (e.clientY + (Math.random() * 40 - 20)) + 'px';
+                s.style.fontSize = (12 + Math.random() * 10) + 'px';
+                document.body.appendChild(s);
+                setTimeout(() => s.remove(), 800);
+            }
+        });
+
+        function startMainExperience() {
+            const greetingScreen = document.getElementById('greeting-screen');
+            const mainScreen = document.getElementById('main-screen');
+
+            greetingScreen.classList.remove('active');
+            greetingScreen.classList.add('hidden-screen');
             
-            // Trigger beautiful confetti when the letter opens
-            setTimeout(fireConfetti, 300);
+            setTimeout(() => {
+                mainScreen.classList.remove('hidden-screen');
+                document.body.style.overflow = 'auto'; 
+                fireConfetti(true);
+                initTiltEffect();
+            }, 800);
+        }
+
+        function initTiltEffect() {
+            const card = document.getElementById('tilt-card');
+            const container = document.getElementById('main-screen');
+            container.addEventListener('mousemove', (e) => {
+                const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+                const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+                card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+            });
+            container.addEventListener('mouseleave', () => {
+                card.style.transform = `rotateY(0deg) rotateX(0deg)`;
+            });
+        }
+
+        // --- ENVELOPE ANIMATION SEQUENCE ---
+        function triggerEnvelope() {
+            const envScene = document.getElementById('envelope-scene');
+            const envWrapper = document.getElementById('envelope-wrapper');
+            const letterModal = document.getElementById('letter-modal');
+
+            // 1. Show envelope container
+            envScene.classList.add('show');
+            
+            // 2. Open Flap
+            setTimeout(() => {
+                envWrapper.classList.add('open');
+            }, 500);
+
+            // 3. Pull Dummy Letter Up
+            setTimeout(() => {
+                envWrapper.classList.add('pull');
+            }, 1200);
+
+            // 4. Transition to Real Letter Modal
+            setTimeout(() => {
+                envScene.classList.remove('show');
+                
+                // Show real modal
+                letterModal.style.display = 'block';
+                // Trigger reflow for transition
+                letterModal.offsetHeight; 
+                letterModal.classList.add('show');
+                
+                // Blast confetti when reading!
+                fireConfetti(false);
+            }, 2000);
         }
 
         function closeLetter() {
-            // Hide the modal and overlay
-            overlay.classList.remove('show');
-            modal.classList.remove('show');
+            const letterModal = document.getElementById('letter-modal');
+            const envWrapper = document.getElementById('envelope-wrapper');
+            
+            letterModal.classList.remove('show');
+            setTimeout(() => {
+                letterModal.style.display = 'none';
+                // Reset Envelope for next time
+                envWrapper.classList.remove('open', 'pull');
+            }, 500);
         }
 
-        // Confetti effect logic
-        function fireConfetti() {
-            var duration = 3000;
-            var animationEnd = Date.now() + duration;
-            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 200 };
+        async function sendReplyToEmail() {
+            const msgBox = document.getElementById('replyMsg');
+            const errorText = document.getElementById('wa-error');
+            const successText = document.getElementById('success-msg');
+            const btn = document.getElementById('send-btn');
+            const msg = msgBox.value.trim();
 
-            function randomInRange(min, max) {
-                return Math.random() * (max - min) + min;
+            if (msg === "") {
+                errorText.style.display = "block";
+                msgBox.style.borderColor = "#ff4081";
+                setTimeout(() => {
+                    errorText.style.display = "none";
+                    msgBox.style.borderColor = "#fecfef";
+                }, 3000);
+                return;
             }
+
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin fa-xl"></i> Sending...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch("https://api.web3forms.com/submit", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", Accept: "application/json" },
+                    body: JSON.stringify({
+                        access_key: "ed3955de-3e2d-47c2-9564-c88f55d9a3df", 
+                        subject: "Birthday Treat Reply from Prithiee 🎂",
+                        message: msg
+                    }),
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    msgBox.style.display = "none";
+                    btn.style.display = "none";
+                    successText.style.display = "block";
+                    fireConfetti(true);
+                } else {
+                    throw new Error("API Error");
+                }
+            } catch (error) {
+                btn.innerHTML = '<i class="fa-solid fa-triangle-exclamation fa-xl"></i> Error! Try Again';
+                btn.disabled = false;
+            }
+        }
+
+        function fireConfetti(isGrand = false) {
+            var duration = isGrand ? 4000 : 3000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
+
+            function randomInRange(min, max) { return Math.random() * (max - min) + min; }
 
             var interval = setInterval(function() {
                 var timeLeft = animationEnd - Date.now();
-
-                if (timeLeft <= 0) {
-                    return clearInterval(interval);
-                }
+                if (timeLeft <= 0) return clearInterval(interval);
 
                 var particleCount = 50 * (timeLeft / duration);
                 confetti(Object.assign({}, defaults, { 
-                    particleCount,
-                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+                    particleCount, 
+                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }, 
+                    colors: ['#ff4081', '#ffffff', '#ff79b0', '#ffeb3b', '#e94057'],
+                    shapes: ['circle', 'square']
                 }));
                 confetti(Object.assign({}, defaults, { 
-                    particleCount,
-                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+                    particleCount, 
+                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }, 
+                    colors: ['#ff4081', '#ffffff', '#ff79b0', '#ffeb3b', '#e94057'],
+                    shapes: ['circle', 'square']
                 }));
             }, 250);
         }
