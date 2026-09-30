@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Prithiee</title>
+    
+    <!-- FontAwesome for the Instagram and Snapchat Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Confetti Library for the celebration effect -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        /* --- General Page Styling & Background --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Floating background circles for aesthetics */
+        .bg-bubbles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .bg-bubbles li {
+            position: absolute;
+            list-style: none;
+            display: block;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.15);
+            bottom: -160px;
+            animation: square 25s infinite;
+            transition-timing-function: linear;
+            border-radius: 50%;
+        }
+        .bg-bubbles li:nth-child(1) { left: 10%; }
+        .bg-bubbles li:nth-child(2) { left: 20%; width: 80px; height: 80px; animation-delay: 2s; animation-duration: 17s; }
+        .bg-bubbles li:nth-child(3) { left: 25%; animation-delay: 4s; }
+        .bg-bubbles li:nth-child(4) { left: 40%; width: 60px; height: 60px; animation-duration: 22s; background-color: rgba(255, 255, 255, 0.25); }
+        .bg-bubbles li:nth-child(5) { left: 70%; }
+        .bg-bubbles li:nth-child(6) { left: 80%; width: 120px; height: 120px; animation-delay: 3s; background-color: rgba(255, 255, 255, 0.2); }
+        @keyframes square {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-700px) rotate(600deg); }
+        }
+
+        /* --- Landing Page Styling (Glassmorphism) --- */
+        #landing-page {
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 50px 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .pre-text {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 20px;
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            color: #d81b60;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .main-btn {
+            background: linear-gradient(45deg, #ff4081, #ff79b0);
+            color: white;
+            border: none;
+            padding: 18px 35px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 64, 129, 0.4);
+            transition: all 0.3s ease;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 64, 129, 0.6);
+        }
+
+        /* --- Letter Modal Styling --- */
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            z-index: 50;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        #letter-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.7);
+            background: #fdfbf7; /* Paper color */
+            background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            padding: 40px;
+            border-radius: 5px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            z-index: 100;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            overflow-y: auto;
+            color: #333;
+            font-family: 'Georgia', serif; /* Professional letter font */
+            line-height: 1.6;
+        }
+
+        /* Classes to trigger the animations */
+        #overlay.show {
+            display: block;
+            opacity: 1;
+        }
+        #letter-modal.show {
+            display: block;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #888;
+            transition: color 0.2s;
+        }
+        .close-btn:hover { color: #d81b60; }
+
+        /* --- Letter Typography --- */
+        .letter-header {
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 15px;
+        }
+        .letter-row { margin-bottom: 5px; }
+        .label { font-weight: bold; display: inline-block; width: 60px; }
+        .subject { font-weight: bold; margin-top: 15px; font-size: 1.1rem;}
+        
+        .letter-body {
+            font-size: 1.1rem;
+            text-align: justify;
+            margin-bottom: 30px;
+            white-space: pre-wrap; /* Preserves spacing and line breaks */
+        }
+        .tamil-text {
+            font-style: italic;
+            color: #555;
+            background: rgba(255, 192, 203, 0.2);
+            padding: 15px;
+            border-left: 4px solid #ff4081;
+            border-radius: 0 5px 5px 0;
+            margin-top: 15px;
+            display: block;
+        }
+
+        /* --- Social Media Links / Buttons --- */
+        .social-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px dashed #ccc;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+            font-family: 'Segoe UI', sans-serif;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+            max-width: 300px;
+            position: relative;
+            z-index: 105; /* Ensures they are clickable over everything */
+            cursor: pointer;
+        }
+
+        .social-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+
+        .ig-btn {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+        }
+
+        .snap-btn {
+            background: #FFFC00;
+            color: #000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .social-username {
+            font-size: 0.9rem;
+            font-weight: normal;
+            opacity: 0.9;
+            margin-left: 5px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive tweaks */
+        @media (max-width: 480px) {
+            h1 { font-size: 2rem; }
+            #landing-page { padding: 35px 25px; }
+            .main-btn { padding: 14px 25px; font-size: 1rem; }
+            #letter-modal { padding: 25px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Animated Background Bubbles -->
+    <ul class="bg-bubbles">
+        <li></li><li></li><li></li><li></li><li></li><li></li>
+    </ul>
+
+    <!-- Landing Page UI -->
+    <div id="landing-page">
+        <p class="pre-text">"If you have 2 mins time please spend on this UI page Prithiee"</p>
+        <h1>🎉 Happy Birthday Prithiee! 🎂</h1>
+        <button class="main-btn" onclick="openLetter()">
+            <i class="fa-solid fa-envelope-open-text"></i> Birthday Treat Application Letter
+        </button>
+    </div>
+
+    <!-- Overlay behind the letter -->
+    <div id="overlay" onclick="closeLetter()"></div>
+
+    <!-- The Application Letter Modal -->
+    <div id="letter-modal">
+        <i class="fa-solid fa-xmark close-btn" onclick="closeLetter()" title="Close"></i>
+        
+        <div class="letter-header">
+            <div class="letter-row"><span class="label">From:</span> Krishna, Mts, Kec</div>
+            <div class="letter-row"><span class="label">To:</span> Prithiee, Chem, Kec</div>
+            <div class="subject">Sub: Regards to acceptance</div>
+        </div>
+
+        <div class="letter-body">
+            <strong>Dear Miss..</strong><br><br>
+            Happy birthday prithiga I am krishna this wish is for your birthday treat as a treat can you follow me on instagram and accept my snapchat because I ever sent you message or call after you telling me you ignore me for not giving me the false hope .. I will understand but my heart can't .. Same as like i follow your words for not msg or call or sending reels to you ..my one and only wish today is accept and follow ...
+            
+            <span class="tamil-text">"Ne reply pannuna nalu pathutu vitutalum ..move on sonalu seri .. oru time accept and return follow pannu silly ah aniku oru karnom sona maari laam solatha pritheee enime na unaku msg panni disturb panna maten soliten that's why I created this uh ... Una summa snap anupratha nalu pathu maanasa thethipen prithee and also in Instagram .. Give your treat for birthday Prithiee"</span>
+        </div>
+
+        <!-- Social Media Buttons - Connected EXACTLY to your URLs -->
+        <div class="social-container">
+            <!-- Instagram Link -->
+            <a href="https://www.instagram.com/_k_r_1_s_h" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="social-link ig-btn">
+                <i class="fa-brands fa-instagram fa-lg"></i> 
+                Instagram 
+                <span class="social-username">@_k_r_1_s_h</span>
+            </a>
+
+            <!-- Snapchat Link -->
+            <a href="https://www.snapchat.com/add/krish140906?share_id=BhgL71hKU0Q&locale=en-IN" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="social-link snap-btn">
+                <i class="fa-brands fa-snapchat fa-lg"></i> 
+                Snapchat 
+                <span class="social-username">@krish140906</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Interactive JavaScript -->
+    <script>
+        const modal = document.getElementById('letter-modal');
+        const overlay = document.getElementById('overlay');
+
+        function openLetter() {
+            // Show the modal and overlay
+            overlay.classList.add('show');
+            modal.classList.add('show');
+            
+            // Trigger beautiful confetti when the letter opens
+            setTimeout(fireConfetti, 300);
+        }
+
+        function closeLetter() {
+            // Hide the modal and overlay
+            overlay.classList.remove('show');
+            modal.classList.remove('show');
+        }
+
+        // Confetti effect logic
+        function fireConfetti() {
+            var duration = 3000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 200 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { 
+                    particleCount,
+                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+                }));
+                confetti(Object.assign({}, defaults, { 
+                    particleCount,
+                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+                }));
+            }, 250);
+        }
+    </script>
+</body>
+</html>
